@@ -1,0 +1,8 @@
+{% extends "simple/base.html" %}
+{% load blog %}
+
+{% block content %}
+{% blog_detail %}
+<hr>
+{% comments %}
+{% endblock %}

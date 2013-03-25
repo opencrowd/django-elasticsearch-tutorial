@@ -1,0 +1,11 @@
+{% extends "simple/base.html" %}
+
+{% block content %}
+<p>Are you sure you want to delete:</p>
+<p> -- object with title:  {{ object.title }}</p>
+
+<form method="post">
+{% csrf_token %}
+<input type="submit" value="Yes">
+</form>
+{% endblock %}

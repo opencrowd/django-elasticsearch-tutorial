@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load blog %}
+
+{% block hero_unit %}
+<div class="hero-unit">
+  <a href="{% url blogpost_list %}">
+	<h1>ElasticUnicorn</h1>
+	<p>A Django blogging engine, powered by unicorns and ElasticSearch</p>
+  </a>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div class="span4">
+  {% user_actions %}
+  {% recent_posts %}
+  {% recent_comments %}
+</div>
+{% endblock %}

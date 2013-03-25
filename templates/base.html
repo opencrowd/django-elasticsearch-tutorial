@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
+    <title>{% block title %}Simple Django + ElasticSearch Tutorial{% endblock %}</title>
+  </head>
+  <body style="padding-top: 40px;">
+    <div class="container-fluid">
+      <div class="row-fluid">
+		<div class="span12">
+		  {% block hero_unit %}
+		  {% endblock %}
+		</div>
+	  </div>
+	  <div class="row-fluid">
+		<div class="span8">
+		  <div class="content">
+			<div id="ajax_content">
+			  {% block content %}
+			  Content!
+			  {% endblock %}
+			</div>
+		  </div>
+		</div>
+        {% block sidebar %}
+		<div class="span2">
+		  <div id="status">
+			<div id="progress" style="display: none;">
+			  <img src="http://www.chimply.com/coconut/images/313725?download">
+			</div>
+			<div id="notifications">
+			</div>
+		  </div>
+		</div>
+		{% endblock %}
+	  </div>
+	</div>
+	<!-- for notifications -->
+	<div id="container" style="display:none; top:auto; right:0px; bottom:0px; margin: 0 0 0 10px;">
+
+      <!--
+		  Later on, you can choose which template to use by referring to the
+		  ID assigned to each template.  Alternatively, you could refer
+		  to each template by index, so in this example, "basic-tempate" is
+		  index 0 and "advanced-template" is index 1.
+		-->
+      <div id="basic-template">
+        <a class="ui-notify-cross ui-notify-close" href="#">x</a>
+		<h1>#{title}</h1>
+		<p>#{text}</p>
+      </div>
+
+      <div id="advanced-template">
+        <!-- ... you get the idea ... -->
+      </div>
+
+	</div>
+
+	<div id="omnipresent-modal" class="modal hide fade modal-form" tabindex="-1" data-width="760">
+	</div>
+
+
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("jquery", "1.7.1");
+      google.load("jqueryui", "1.8.16" );
+	  google.load('visualization', '1', {'packages':['corechart']});
+    </script>
+    <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/jquery.history.js"></script>
+	<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-alert.js"></script>
+	<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js"></script>
+	<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-popover.js"></script>
+  </body>
+</html>

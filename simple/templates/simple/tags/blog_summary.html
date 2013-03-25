@@ -1,0 +1,18 @@
+{% load blog %}
+<div class="post-summary">
+  {% if user.is_authenticated %}
+    <p class="text-right" style="float: right">
+	  <a href="{% url blogpost_edit object.parent object.id %}">
+		<i class="icon-edit"></i>
+	  </a>
+	  <a href="{% url blogpost_delete object.parent object.id %}">
+		<i class="icon-trash"></i>
+	  </a>
+	</p>
+  {% endif %}
+  <p><a href="{% url blogpost_detail blog_post.author.get_meta.id blog_post.get_meta.id %}">{{ blog_post.title }}</a></p>
+  <p>{{ blog_post.body_clean|truncate_char_to_space:50}}</p>
+  {% if comment_count %}
+    <p>{{ comment_count }} comment(s)</p>
+  {% endif %}
+</div>

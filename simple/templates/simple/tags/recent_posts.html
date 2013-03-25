@@ -1,0 +1,16 @@
+<div>
+  <div class="lead">
+	Recent Posts
+  </div>
+  <div>
+	{% for blog_post in blog_posts %}
+      {% if forloop.first %}
+        <ul class="unstyled">
+      {% endif %}
+	      <li><a href="{% url blogpost_detail blog_post.author.get_meta.id blog_post.get_meta.id %}">{{ blog_post.title }}</a></li>
+	  {% if forloop.last %}
+	    </ul>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

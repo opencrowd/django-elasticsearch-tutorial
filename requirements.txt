@@ -1,0 +1,4 @@
+Django>=1.4
+-e git+git://github.com/scoursen/pyes.git#egg=pyes
+
+akismet==0.2.0

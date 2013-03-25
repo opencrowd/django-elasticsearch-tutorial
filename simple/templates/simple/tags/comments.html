@@ -1,0 +1,18 @@
+{% load blog %}
+{% load crispy_forms_tags %}
+<div class="row-fluid">
+  {% for comment in comments %}
+    <div class="row-fluid">
+	  <div class="span{{ span }}" style="float: right">
+		<p class="muted">on {{ comment.created_on|date:'D d M Y' }} at {{ comment.created_on|date:'h:m:s a' }} said:</p>
+		<p>{{ comment.comment|safe }}</p>
+	  </div>
+	  {% comments comment next_depth %}
+    </div>
+  {% endfor %}
+  <div class="row-fluid">
+	<div class="span{{ span }}" style="float:right">
+	  {% crispy form %}
+	</div>
+  </div>
+</div>

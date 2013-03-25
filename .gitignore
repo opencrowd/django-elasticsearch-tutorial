@@ -1,0 +1,14 @@
+syntax: glob
+*.pyc
+*.pyo
+*~
+.installed.cfg
+.hg
+.hgignore
+bin
+develop-eggs
+dist
+downloads
+eggs
+parts
+src/*.egg-info

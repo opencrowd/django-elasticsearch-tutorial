@@ -1,0 +1,16 @@
+<html>
+  <head>
+	<title>Title!</title>
+  </head>
+  <body>
+	{% for object in object_list %}
+	  {% if forloop.first %}
+	    <ul>
+	  {% endif %}
+	  <li>{{ object.comment }}</li>
+	  {% if forloop.last %}
+	    </ul>
+	  {% endif %}
+	{% endfor %}
+  </body>
+</html>

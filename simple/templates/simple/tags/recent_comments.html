@@ -1,0 +1,18 @@
+{% load blog %}
+<div>
+  <div class="lead">
+	Recent Comments
+  </div>
+  <div>
+	{% for comment in comments %}
+      {% if forloop.first %}
+        <dl>
+      {% endif %}
+	      <dt>{{ comment.comment|truncate_char_to_space:20 }}</dt>
+	      <dd>on <a href="{% url blogpost_detail comment.reference.author comment.reference.get_meta.id %}">"{{ comment.reference.title }}"</a></dd>
+	  {% if forloop.last %}
+	    </dl>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
