@@ -1,6 +1,7 @@
 Simple Django and ElasticSearch Tutorial
 ========================================
-
+<a href="http://www.opencrowd.com">![OpenCrowd][1]</a>
+[1]: https://secure.gravatar.com/avatar/a6d183cba9fda35ebb550dbebd8b5d28?s=420&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png
 
 Requirements
 ------------
