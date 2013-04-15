@@ -122,16 +122,17 @@ def get_posts(*order_by):
 
 def index_post(author, post):
     es = get_connection()
-    post['author'] = author.get_meta().id
-    return es.index(post, ELASTICSEARCH_INDEX, 'post', parent=author)._meta._id
+    author_id = author.get_meta().id
+    post['author'] = author_id
+    return es.index(post, ELASTICSEARCH_INDEX, 'post', parent=author_id)._id
 
 def index_comment(comment):
     es = get_connection()
-    return es.index(comment, ELASTICSEARCH_INDEX, 'comment')._meta._id
+    return es.index(comment, ELASTICSEARCH_INDEX, 'comment')._id
 
 def create_author(**kwargs):
     es = get_connection()
-    _id = es.index(kwargs, ELASTICSEARCH_INDEX, 'author')._meta._id
+    _id = es.index(kwargs, ELASTICSEARCH_INDEX, 'author')._id
     return es.get(ELASTICSEARCH_INDEX, 'author', _id)
 
 def get_author(**kwargs):
