@@ -23,6 +23,9 @@ comment = {
     "is_spam": mappings.BooleanField(name="is_spam", index="not_analyzed", store=False).as_dict(),
     "reference_to": mappings.StringField(name="reference_to", index="not_analyzed", store=False).as_dict(),
     "reference_type": mappings.StringField(name="reference_type", index="not_analyzed", store=False).as_dict(),
+    "post": mappings.StringField(name="post", index="not_analyzed", store=False).as_dict(),
+    "post_author": mappings.StringField(name="post_author", index="not_analyzed", store=False).as_dict(),
+    "post_title": mappings.StringField(name="post_title", index="not_analyzed", store=False).as_dict(),
     "pingback": mappings.StringField(name="pingback", index="not_analyzed", store=False).as_dict(),
     }
 

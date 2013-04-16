@@ -96,12 +96,30 @@ def comment_edit(request, reference_type, reference_to):
                     comment['is_spam'] = True
             else:
                 comment['is_spam'] = False
+            referent = None
+            while reference_type != 'post':
+                # chase back to a blog post
+                referent = get_reference(reference_to, reference_type)
+                reference_to = referent.reference_to
+                reference_type = referent.reference_type
+                referent = get_reference(reference_to, reference_type)
+            if referent:
+                comment['post_author'] = referent.author
+                comment['post'] = referent.get_meta().id
+                comment['post_title'] = referent.title
+            else:
+                referent = get_reference(reference_to, reference_type)
+                comment['post_author'] = referent.author
+                comment['post'] = referent.get_meta().id
+                comment['post_title'] = referent.title
             index_comment(comment)
-    while reference_type != 'post':
-        # chase back to a blog post
-        referent = get_reference(reference_to, reference_type)
-        reference_to = referent.reference_to
-        reference_type = referent.reference_type
-    referent = get_reference(reference_to, reference_type)
-    return HttpResponseRedirect(reverse('blogpost_detail', args=(referent.author, referent.get_meta().id)))
+        return HttpResponseRedirect(reverse('blogpost_detail', args=(referent.author, referent.get_meta().id)))
+    else:
+        while reference_type != 'post':
+            # chase back to a blog post
+            referent = get_reference(reference_to, reference_type)
+            reference_to = referent.reference_to
+            reference_type = referent.reference_type
+            referent = get_reference(reference_to, reference_type)
+        return HttpResponseRedirect(reverse('blogpost_detail', args=(referent.author, referent.get_meta().id)))
 
