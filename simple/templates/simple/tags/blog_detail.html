@@ -1,29 +1,26 @@
-<div class="row-fluid">
+<div>
   <div class="post">
 	<div class="post-header">
 	  <div class="post-title">
 		<h1>{{ blog_post.title }}</h1>
 	  </div>
-	  <div class="well">
-		Posted by {{ blog_post.author.name }} on {{ blog_post.created_on|date:"D d M Y" }} at {{ blog_post.created_on|date:"h:m:s a" }}
+	  <div class="post-byline">
+		By <span class="post-author">{{ blog_post.author.name }}</span> | {{ blog_post.created_on|date:"D d M Y" }}
+	  </div>
+	  <div class="post-image">
+		<img src="http://placekitten.com/910/200">
 	  </div>
 	</div>
 	<div class="post-body">
-	  {% if user.is_authenticated %}
-        <div class="span10">
-	  {% else %}
-		<div class="span12">
-      {% endif %}
-          {{ blog_post.body|safe }}
-	    </div>
-	  {% if user.is_authenticated %}
-	    <div class="span2">
-		  <ul>
-		    <li><a href="{%url blogpost_edit blog_post.author.get_meta.id blog_post.get_meta.id %}"><i class="icon-edit"></i></a></li>
-		    <li><a href="{%url blogpost_delete blog_post.author.get_meta.id blog_post.get_meta.id %}"><i class="icon-trash"></i></a></li>
-		  </ul>
-	    </div>
-	  {% endif %}
-    </div>
+      {{ blog_post.body|safe }}
+	</div>
+	{% if user.is_authenticated %}
+	<div style="float: right">
+	  <ul>
+		<li><a href="{%url blogpost_edit blog_post.author.get_meta.id blog_post.get_meta.id %}"><i class="icon-edit"></i>Edit</a></li>
+		<li><a href="{%url blogpost_delete blog_post.author.get_meta.id blog_post.get_meta.id %}"><i class="icon-trash"></i>Delete</a></li>
+	  </ul>
+	</div>
+	{% endif %}
   </div>
 </div>

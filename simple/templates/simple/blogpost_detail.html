@@ -1,8 +1,13 @@
-{% extends "simple/base.html" %}
-{% load blog %}
+{% extends "blog/base.html" %}
+{% load blog_tags %}
+{% load cache %}
 
-{% block content %}
+{% block blog_content %}
 {% blog_detail %}
-<hr>
-{% comments %}
+<h3>Comments</h3>
+<div class="comments">
+  {% cache 86400 comments object.get_meta.id %}
+    {% comments %}
+  {% endcache %}
+</div>
 {% endblock %}

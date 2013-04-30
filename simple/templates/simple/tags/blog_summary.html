@@ -1,18 +1,28 @@
-{% load blog %}
-<div class="post-summary">
-  {% if user.is_authenticated %}
-    <p class="text-right" style="float: right">
-	  <a href="{% url blogpost_edit object.parent object.id %}">
-		<i class="icon-edit"></i>
-	  </a>
-	  <a href="{% url blogpost_delete object.parent object.id %}">
-		<i class="icon-trash"></i>
-	  </a>
-	</p>
-  {% endif %}
-  <p><a href="{% url blogpost_detail blog_post.author.get_meta.id blog_post.get_meta.id %}">{{ blog_post.title }}</a></p>
-  <p>{{ blog_post.body_clean|truncate_char_to_space:50}}</p>
-  {% if comment_count %}
-    <p>{{ comment_count }} comment(s)</p>
-  {% endif %}
+{% load blog_tags %}
+<div class="post">
+  <div class="post-header">
+	<div class="blog-post-summary">
+	  {% if user.is_authenticated %}
+      <p class="text-right" style="float: right">
+		<a href="{% url blogpost_edit object.parent object.id %}">
+		  <i class="icon-edit"></i>
+		</a>
+		<a href="{% url blogpost_delete object.parent object.id %}">
+		  <i class="icon-trash"></i>
+		</a>
+	  </p>
+	  {% endif %}
+	  <div class="post-title">
+		<h1><a href="{% url blogpost_detail_by_slug blog_post.slug %}">{{ blog_post.title }}</a></h1>
+	  </div>
+	  {% if blog_post.summary %}
+	    <p>{{ blog_post.summary|striptags}} (<a href="{% url blogpost_detail_by_slug blog_post.slug %}">Read more...</a>)</p>
+	  {% else %}
+	    <p>{{ blog_post.body_clean|striptags|truncate_char_to_space:200}} (<a href="{% url blogpost_detail_by_slug blog_post.slug %}">Read more...</a>)</p>
+	  {% endif %}
+	  {% if comment_count %}
+      <p>{{ comment_count }} comment(s)</p>
+	  {% endif %}
+	</div>
+  </div>
 </div>

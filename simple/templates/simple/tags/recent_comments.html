@@ -1,4 +1,4 @@
-{% load blog %}
+{% load blog_tags %}
 <div>
   <div class="lead">
 	Recent Comments
@@ -9,7 +9,7 @@
         <dl>
       {% endif %}
 	      <dt>{{ comment.comment|truncate_char_to_space:20 }}</dt>
-	      <dd>on <a href="{% url blogpost_detail comment.post_author comment.post %}">"{{ comment.post_title }}"</a></dd>
+	      <dd>on <a href="{% url blogpost_detail_by_slug comment.post %}">"{{ comment.post_title }}"</a></dd>
 	  {% if forloop.last %}
 	    </dl>
       {% endif %}

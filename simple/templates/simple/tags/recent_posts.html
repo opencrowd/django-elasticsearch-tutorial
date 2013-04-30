@@ -5,11 +5,12 @@
   <div>
 	{% for blog_post in blog_posts %}
       {% if forloop.first %}
-        <ul class="unstyled">
+        <dl class="unstyled">
       {% endif %}
-	      <li><a href="{% url blogpost_detail blog_post.author.get_meta.id blog_post.get_meta.id %}">{{ blog_post.title }}</a></li>
+	      <dt><a href="{% url blogpost_detail_by_slug blog_post.slug %}">{{ blog_post.title }}</a></dt>
+		  <dd>{{ blog_post.created_on }}</dd>
 	  {% if forloop.last %}
-	    </ul>
+	    </dl>
       {% endif %}
     {% endfor %}
   </div>

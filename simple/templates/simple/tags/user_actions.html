@@ -4,12 +4,8 @@
   </div>
   <div>
 	<ul class="unstyled">
-	  {% if user.is_authenticated %}
-	    <li><a href="{% url blogpost_create %}"><i class="icon-edit"></i>New post</a></li>
-	  {% else %}
-		<li><a href="{% url auth_login %}"><i class="icon-user"></i>Login</a></li>
-	  {% endif %}
-		<li><a href="{% url blogpost_list %}">All posts</a></li>
+	  <li><a href="{% url blogpost_create %}"><i class="icon-edit"></i>New post</a></li>
+	  <li><a href="{% url blogpost_list %}">All posts</a></li>
 	</ul>
   </div>
 </div>

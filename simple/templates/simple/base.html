@@ -1,19 +1,41 @@
 {% extends "base.html" %}
-{% load blog %}
+{% load blog_tags %}
+{% load compressed %}
 
-{% block hero_unit %}
-<div class="hero-unit">
-  <a href="{% url blogpost_list %}">
-	<h1>ElasticUnicorn</h1>
-	<p>A Django blogging engine, powered by unicorns and ElasticSearch</p>
-  </a>
-</div>
+{% block head-extra-css %}
+  <link rel="stylesheet" type="text/css" href="/static/blog/css/blog.css">
+  {% compressed_css 'blog' %}
 {% endblock %}
 
-{% block sidebar %}
-<div class="span4">
-  {% user_actions %}
-  {% recent_posts %}
-  {% recent_comments %}
-</div>
-{% endblock %}
+{% block body %}
+  <div class="left-container">
+	{% block left_container %}
+	  {% user_actions %}
+	  {% recent_posts %}
+	  {% recent_comments %}
+	{% endblock left_container %}
+  </div>
+  <div class="right-container">
+	<div class="blog-content">
+	  {% block blog_content %}
+	  {% endblock blog_content %}
+	</div>
+  </div>
+  <div class="spacer">
+  </div>
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    google.load("jquery", "1.7.1");
+    google.load("jqueryui", "1.8.16" );
+	google.load('visualization', '1', {'packages':['corechart']});
+  </script>
+  <script type="text/javascript">
+	function toggleReply(div_id) {
+		$(div_id).toggleClass("hidden");
+		$('html, body').animate({
+            scrollTop: $($(div_id)[0]).offset().top
+        }, 500);	}
+  </script>
+{% endblock body %}
+
+

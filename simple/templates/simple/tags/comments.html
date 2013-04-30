@@ -1,18 +1,42 @@
-{% load blog %}
+{% load blog_tags %}
 {% load crispy_forms_tags %}
-<div class="row-fluid">
-  {% for comment in comments %}
-    <div class="row-fluid">
-	  <div class="span{{ span }}" style="float: right">
-		<p class="muted">on {{ comment.created_on|date:'D d M Y' }} at {{ comment.created_on|date:'h:m:s a' }} said:</p>
-		<p>{{ comment.comment|safe }}</p>
-	  </div>
-	  {% comments comment next_depth %}
-    </div>
-  {% endfor %}
-  <div class="row-fluid">
-	<div class="span{{ span }}" style="float:right">
-	  {% crispy form %}
-	</div>
+{% for comment in comments %}
+<div class="comment">
+  <div class="comment-header">
+	<span class="comment-byline">
+	  {% if comment.pingback %}
+	    <a href="{{ comment.pingback }}">
+	  {% endif %}
+	  {% if comment.comment_author %}
+	    {{ comment.comment_author }}
+	  {% else %}
+	    Anonymous
+	  {% endif %}
+	  {% if comment.pingback %}
+	    </a>
+	  {% endif %}
+	</span>
+	<span class="comment-date"> {{ comment.created_on|date:'D d M Y' }}</span>
+  </div>
+  <div class="comment-body">
+	<p>{{ comment.comment|safe }}</p>
   </div>
 </div>
+<div class="comment-reply">
+  <button class="comment-reply-button btn btn-primary" name="{{ comment.get_meta.id }}" onClick='toggleReply("#{{ comment.get_meta.id }}")'>Reply</button>
+  <div id="{{ comment.get_meta.id }}" class="comment-form hidden">
+	{% crispy form %}
+  </div>
+</div>
+<div class="comment-nested">
+  {% comments comment next_depth %}
+</div>
+{% endfor %}
+{% if form.reference_type == 'post' %}
+<div class="comment-on-post">
+  <button class="comment-reply-button btn btn-primary" name="{{ blog_post.get_meta.id }}" onClick='toggleReply("#{{ blog_post.get_meta.id }}")'>Reply</button>
+  <div id="{{ blog_post.get_meta.id }}" class="comment-form hidden">
+	{% crispy form %}
+  </div>
+</div>
+{% endif %}

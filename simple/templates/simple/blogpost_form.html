@@ -1,6 +1,12 @@
-{% extends "simple/base.html" %}
+{% extends "blog/base.html" %}
 {% load crispy_forms_tags %}
 
-{% block content %}
-{% crispy form %}
+{% block blog_content %}
+<div class="post">
+  <div class="post-body">
+	<div class="post-form">
+	  {% crispy form %}
+	</div>
+  </div>
+</div>
 {% endblock %}
