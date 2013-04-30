@@ -6,7 +6,9 @@ from django.core.urlresolvers import reverse
 
 class BlogForm(forms.Form):
     title = forms.CharField(max_length=100)
-    body = forms.CharField()
+    summary = forms.CharField(widget=forms.Textarea, required=False)
+    body = forms.CharField(widget=forms.Textarea)
+    is_markdown = forms.BooleanField(required=False)
 
     def __init__(self, *args, **kwargs):
         forms.Form.__init__(self, *args, **kwargs)
@@ -18,6 +20,8 @@ class BlogForm(forms.Form):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Field('title', css_class='input-xlarge'),
+            Field('is_markdown', css_class='input-xlarge'),
+            Field('summary', css_class='field span12'),
             Field('body', css_class='field span12'),
             )
         self.helper.layout.insert(0, HTML('<legend>%s</legend>' % legend))
@@ -29,14 +33,9 @@ class BlogForm(forms.Form):
             )
 
 class CommentForm(forms.Form):
-    pingback = forms.CharField()
-    comment = forms.CharField()
-
-#    class Meta:
-#        model = Comment
-#        fields = ['pingback', 'comment']
-#        exclude = ['reference', 'is_spam']
-#        widgets = {'comment': forms.Textarea(attrs=dict(rows=4))}
+    name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '@me'}), required=False)
+    pingback = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'http://wwww.'}), required=False)
+    comment = forms.CharField(widget=forms.Textarea)
 
     def __init__(self, reference_type=None, reference_to=None, *args, **kwargs):
         forms.Form.__init__(self, *args, **kwargs)
@@ -45,9 +44,12 @@ class CommentForm(forms.Form):
         ajax_form = 'list-None-form'
         submit_id = 'action-button'
         cancel_id = 'cancel-button'
+        self.reference_to = reference_to
+        self.reference_type = reference_type
         self.helper = FormHelper()
         self.helper.form_action = reverse('comment_create', args=(reference_type, reference_to))
         self.helper.layout = Layout(
+            Field('name', css_class='field span12'),
             Field('pingback', css_class="field span12"),
             Field('comment', css_class="field span12"),
             )
