@@ -1,0 +1,35 @@
+{% extends "base_admin.html" %}
+{% block extrahead %}
+    {{ block.super }}
+{% endblock %}
+{% block innercontent %}
+    <ul class="object-tools">
+        <li>
+            <a class="addlink" href="add/">Add BlogPost</a>
+        </li>
+    </ul>
+    <table cellspacing="0" style="margin-top: 20px;">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+                <th>Author Id</th>
+				<th>Created On</th>
+            </tr>
+        </thead>
+		{% for post in posts %}
+            <tr class="{% cycle 'row1' 'row2' %}">
+                <td>&nbsp;</td>
+                <td>
+                    <a href="{{ post.slug }}">{{ post.slug }}</a>
+                </td>
+                <td>
+				  {{ post.author }}
+                </td>
+                <td>
+				  {{ post.created_on }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

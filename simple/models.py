@@ -9,13 +9,24 @@ from django.utils.hashcompat import md5_constructor
 from datetime import datetime
 import time
 from pyes import ES
-from pyes.query import MatchAllQuery, FilteredQuery, TermQuery
-from pyes.filters import TermFilter, TermsFilter, ANDFilter
+from pyes.query import MatchAllQuery, FilteredQuery, TermQuery, ESRange
+from pyes.filters import TermFilter, TermsFilter, ANDFilter, RangeFilter
+from pyes.exceptions import NotFoundException
 from django.conf import settings
 
 ELASTICSEARCH_URL = getattr(settings, 'ELASTICSEARCH_URL', 'http://localhost:9200')
 ELASTICSEARCH_INDEX = getattr(settings, 'ELASTICSEARCH_INDEX', 'blog')
 
+# A non-managed, dummy model for admin purposes
+class BlogPost(models.Model):
+    class Meta:
+        managed = False
+
+
+def _clear_cache(prefix, *args):
+    var_key = md5_constructor(':'.join(args)).hexdigest()
+    all_key = '%s.%s' % (prefix, var_key)
+    cache.get_cache('default').delete(all_key)
 
 def strip_html_tags(html_txt):
     if html_txt is None:
@@ -36,7 +47,7 @@ def get_connection():
 
 def get_reference(_id, _type):
     parts = _id.split('-!-')
-    es = ES()
+    es = get_connection()
     if len(parts) == 1:
         return es.get('blog', _type, parts[0])
     return es.get('blog', _type, parts[0], routing=parts[1])
@@ -88,11 +99,15 @@ def get_post_by_slug(slug):
         obj['updated_on'] = _parse_datetime(obj['updated_on'])
     else:
         obj['updated_on'] = datetime.utcnow()
+    obj['seo_tags'] = ','.join(obj['seo_tags'])
     return obj
 
 def get_post(author, blog_id):
     es = get_connection()
-    obj = es.get(ELASTICSEARCH_INDEX, 'post', blog_id, routing=author)
+    try:
+        obj = es.get(ELASTICSEARCH_INDEX, 'post', blog_id, routing=author)
+    except NotFoundException:
+        raise ObjectDoesNotExist
     obj['author'] = get_author(id=author)
     if 'created_on' in obj:
         obj['created_on'] = _parse_datetime(obj['created_on'])
@@ -102,11 +117,16 @@ def get_post(author, blog_id):
         obj['updated_on'] = _parse_datetime(obj['updated_on'])
     else:
         obj['updated_on'] = datetime.utcnow()
+    obj['seo_tags'] = ','.join(obj['seo_tags'])
     return obj
 
-def get_posts(*order_by):
+def get_posts(future=False, *order_by):
     es = get_connection()
-    query = MatchAllQuery()
+    if future:
+        query = MatchAllQuery()
+    else:
+        qrange = ESRange('created_on', to_value=datetime.utcnow())
+        query = FilteredQuery(MatchAllQuery(), RangeFilter(qrange))
     ordering = []
     for field in order_by:
         if field.startswith('-'):
@@ -151,15 +171,17 @@ def index_post(author, post, slug=None):
         except AttributeError:
             post_id = None
     post['author'] = author_id
+    _clear_cache('template.cache.blog_list')
+    if post_id:
+        _clear_cache('template.cache.blog_summary', post_id)
+        _clear_cache('template.cache.blog_detail', post_id)
     return es.index(post, ELASTICSEARCH_INDEX, 'post', id=post_id, parent=author_id)._id
 
 def index_comment(comment):
     es = get_connection()
     post_ref = comment.get('post')
     if post_ref:
-        var_key = md5_constructor(post_ref).hexdigest()
-        all_key = 'template.cache.comments.%s' % var_key
-        cache.get_cache('default').delete(all_key)
+        _clear_cache('template.cache.comments', post_ref)
     return es.index(comment, ELASTICSEARCH_INDEX, 'comment')._id
 
 def create_author(**kwargs):

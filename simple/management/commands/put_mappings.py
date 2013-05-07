@@ -6,7 +6,8 @@ ELASTICSEARCH_URL = getattr(settings, 'ELASTICSEARCH_URL', 'http://localhost:920
 ELASTICSEARCH_INDEX = getattr(settings, 'ELASTICSEARCH_INDEX', 'blog')
 
 author = {
-    "name": mappings.StringField(name="name", index="analyzed", index_analyzer="standard", store=False).as_dict()
+    "name": mappings.StringField(name="name", index="analyzed", index_analyzer="standard", store=False).as_dict(),
+    "url": mappings.StringField(name='url', index='not_analyzed', store=False).as_dict(),
 }
 
 blogpost = {
@@ -22,7 +23,9 @@ blogpost = {
     "created_on": mappings.DateField(name="created_on", index="not_analyzed", store=False).as_dict(),
     "updated_on": mappings.DateField(name="updated_on", index="not_analyzed", store=False).as_dict(),
     "title": mappings.StringField(name="title", index="not_analyzed", store=False).as_dict(),
-    'slug': mappings.StringField(name='slug', index='not_analyzed', store=False).as_dict(),
+    "slug": mappings.StringField(name="slug", index='not_analyzed', store=False).as_dict(),
+    "serial": mappings.IntegerField(name="serial", index="not_analyzed", store=False).as_dict(),
+    "seo_tags": mappings.StringField(name="seo_tags", index="not_analyzed", store=False).as_dict(),
     }
 
 comment = {
@@ -35,6 +38,8 @@ comment = {
     "post_author": mappings.StringField(name="post_author", index="not_analyzed", store=False).as_dict(),
     "post_title": mappings.StringField(name="post_title", index="not_analyzed", store=False).as_dict(),
     "pingback": mappings.StringField(name="pingback", index="not_analyzed", store=False).as_dict(),
+    "serial": mappings.IntegerField(name="serial", index="not_analyzed", store=False).as_dict(),
+    "path": mappings.StringField(name="path", index="not_analyzed", store=False).as_dict(),
     }
 
 class Command(BaseCommand):

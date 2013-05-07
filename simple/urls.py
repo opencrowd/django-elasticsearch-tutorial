@@ -5,6 +5,12 @@ from django.conf.urls.defaults import patterns, include, url
 
 urlpatterns = patterns(
     'blog.views',
+
+    #Admin overrides
+    url(r'^blogpost/add/$', 'blogpost_changeform'),
+    url(r'^blogpost/(?P<id>.*?)/$', 'blogpost_changeform'),
+    url(r'^blogpost/$', 'blogpost_changelist'),
+
     url(r'^comment/(?P<reference_type>.*?)/(?P<reference_to>.*?)/create/$', 'comment_edit', name='comment_create'),
     url(r'^post/action/create/$', 'blog_edit', name='blogpost_create'),
     url(r'^post/(?P<parent>.*?)/(?P<pk>.*?)/edit/$', 'blog_edit', name='blogpost_edit'),
@@ -14,3 +20,5 @@ urlpatterns = patterns(
     url(r'^posts/$', 'blog_list', name='blogpost_list'),
     url(r'^$', 'blog_list'),
 )
+
+
